@@ -5,19 +5,29 @@ class DataAcquisitionTasks:
     def fetch_multi_frequency_ohlc(self, agent, asset_class, instrument_name, market):
         return Task(
             description=dedent(f"""\
-                [DATA ACQUISITION]
-                Collect OHLC data for {asset_class} instrument {instrument_name} in the {market} market across multiple frequencies (e.g., 5m, 15m, 1h, daily).
+                Fetch OHLC and volume data for {asset_class} instrument {instrument_name} in the {market} market across multiple frequencies (e.g., 5m, 15m, 1h, daily).
 
                 Guidelines:
-                - Use asset-class and market appropriate data sources (e.g., AlphaVantage for stocks, Binance for crypto).
+                - Consult with other agents to get the correct API query to use for the data retrieval
+                - Once you have the correct API query, use the CodeInterpreterTool to execute the query and get the data
+                - Also Build a Data Pipeline in python to refresh the historical datasets every day at a fixed cadence. The refresh should be optimised for performance and accuracy
                 - Respect API rate limits and include robust error handling.
-                - Store all raw data in a shared repository for downstream processing:
+                - Store all Historical raw data in a shared repository for downstream processing. If historical data exists only update the new records:
                   Path: /data/raw/{market.lower()}/{asset_class.lower()}/{instrument_name}/ohlc_{{FREQUENCY}}_{{YYYY-MM}}.parquet
-
                 The output of this task will be used as the input for the data preprocessing pipeline.
                 """),
             agent=agent,
-            expected_output="Parquet files containing raw OHLC data at multiple frequencies for the specified instrument stored in the designated repository."
+            expected_output="Parquet files containing relevant data at multiple frequencies for the specified instrument stored in the designated repository and python code to refresh the data regularly."
+        )
+    
+    def build_query(self, agent, asset_class, instrument_name):
+        return Task(
+            description=dedent(f"""\
+                Figure out the relevant API documentation for getting all the relevant data requested and              
+                build a query to retrieve them for {instrument_name} of {asset_class}
+                """),
+            expected_output="A Json query to retrieve the data requested for {instrument_name} of {asset_class} from the API documentation",
+            agent=agent,
         )
 
     def stream_real_time_ticks(self, agent, asset_class, instrument_name, market):

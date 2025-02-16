@@ -1,0 +1,185 @@
+suggest_analysis:
+  description: >
+    Recommend what types of analysis to be performed and what all data would be required for generating winning strategies to achieve {goal}
+  tools: 
+    - PDFSearchTool
+  expected_output: >
+    - List of potential {instrument} for potential strategies
+    - List of {analysis} to be performed
+    - List of {data} required for the analysis
+    - Markdown report explaining the rationale for the recommended {analysis}
+
+distribute_portfolio:
+  description: >
+    Distribute the {capital} into types of strategies to meet the {goal} 
+  expected_output: >
+    - Detailed Report on the recommended portfolio allocation with supporting data and charts
+    - List of Strategies with allocated capital
+
+
+identify_trading_strategies:
+  description : >
+    Develop potential alphas 
+  expected_output: >
+    - List of {strategy}
+    - Detailed document of each {strategy} highlighting the parameters, signals and any caveats
+
+run_analysis:
+  description : >
+    Run {analysis} to test various hypothesis
+  expected_output: >
+    - {analysis} Report
+
+fetch_multi_frequency_ohlc:
+    description: >
+      Collect OHLC data for {instrument} at various {duration} such as 5m, 15m, 1h, daily frequencies.
+    expected_output: |
+      Parquet files:
+      - `/data/in_market/historical/{instrument}_{duration}_2025-02.parquet`
+      
+#   - name: stream_real_time_ticks
+#     description: |
+#       Capture real-time tick data for US markets (Polygon.io) and IN markets (NSE/BSE WebSocket feeds).
+#     tools:
+#       - PolygonIOWebSocket (Free tier: 1 req/sec) :cite[2]:cite[7]
+#       - NSEPyLibrary (Custom tool for IN markets)
+#     expected_output: |
+#       Streams stored in:
+#       - `s3://us_market/tick_data/SPX_2025-02-10T09:30:00.json`
+#       - `s3://in_market/tick_data/NIFTY50_2025-02-10T09:15:00.json`
+
+#   # ORDER BOOK & OPTION CHAIN DATA
+#   - name: collect_orderbook_option_data
+#     description: |
+#       Fetch order book depth (US: CBOE; IN: NSE derivatives) and option chain data.
+#     tools:
+#       - FinnhubAPITool (Free tier: 60 req/min) :cite[7]
+#       - NSEOptionChainScraper (Custom Python scraper)
+#     expected_output: |
+#       - `/data/us_market/options/SPX_2025-03-20_CALL.json`
+#       - `/data/in_market/options/NIFTY50_2025-02-27_PUT.csv`
+
+  # NEWS & SOCIAL MEDIA
+scrape_news_sentiment:
+    description: >
+      Extract news from Moneycontrol (IN), Benzinga (US), and social media (Twitter, Reddit) related to {instrument}
+    tools: 
+      - ScrapeWebsiteTool
+      - TwitterAPITool
+    expected_output: |
+      - structured json output containing name of {instrument}, article, source
+
+
+#   # CORPORATE ACTIONS & FUNDAMENTALS
+#   - name: ingest_corporate_actions
+#     description: |
+#       Aggregate dividends, splits (IN: BSE India; US: SEC EDGAR).
+#     tools:
+#       - SECEdgarAPITool (Free) :cite[2]
+#       - BSERSSParser (Custom tool)
+#     expected_output: |
+#       PostgreSQL tables:
+#       - `in_corporate_actions`: Symbol, type, ex_date, value_inr
+#       - `us_corporate_actions`: Symbol, type, ex_date, value_usd
+
+#   # ECONOMIC INDICATORS & ALTERNATIVE DATA
+#   - name: fetch_economic_alt_data
+#     description: |
+#       Collect GDP, CPI (IN: MOSPI; US: FRED) + alternative data (satellite, credit card trends).
+#     tools:
+#       - FREDAPITool (Free) :cite[2]
+#       - MOSPIWebScraper (Custom tool)
+#       - AWS_S3_PublicDatasets (Free/paid, e.g., retail trends)
+#     expected_output: |
+#       - `/economics/us_fred_gdp_2025-Q1.csv`
+#       - `/alt_data/in_isro_satellite_2025-02.tiff`
+
+#   # VALIDATION & COMPLIANCE
+#   - name: validate_and_log_compliance
+#     description: |
+#       Ensure SEBI/SEC compliance, flag restricted securities, and audit data usage.
+#     tools:
+#       - RegulatoryChecker (Custom tool)
+#       - AuditLogger (LangChain integration) :cite[8]
+#     expected_output: |
+#       - `/compliance/in_sebi_2025-02-10.log`
+#       - `/compliance/us_sec_audit.csv`
+
+# Clean and Preprocess Market Data:
+#   Build a robust pipeline to clean and preprocess the data collected from the different sources. Map all the data to a common schema.
+#   Ensure the data is in a structured format and is ready for analysis.
+#   Store the cleaned data in a database for further analysis. Calculate and store any neccessary features or indicators requested by other agents.
+
+
+# Analyse Data:
+#   Analyze all the available cleaned data tables to identify patterns, trends, and relationships.
+#   Do Fundamental Analysis, Technical Analysis, Sentiment Analysis, Behavioural Analysis, Statistical Analysis, Scenario Analysis, Anomaly Detection, Market Regime Detection, Correlation Analysis, Pattern Recognition, etc.
+#   Generate Insights and Recommendations based on the analysis. All the insights and recommendations should be stored in a database. For each tradable asset / market / instrument, there should be a dedicated table to store the insights and recommendations and reports generated for better decision making for higher management.
+
+# Identify Potential Trading Opportunities:
+#   Identify potential trading opportunities based on the analysis. Detect trading signals that may indicate profitable trading opportunities incorporating all the analysis and insights generated.
+  
+#   List of potential trading opportunities with associated signals and recommendations for higher management.
+
+# Develop Trading Strategies:
+#   Develop Trading Strategies in python code based on the recommended trading signals and strategies and the analysis and insights generated.
+
+# Backtest Trading Strategies:
+#   Evaluate the performance of trading strategies on historical data.
+
+# Optimize Strategy Parameters:
+#   Fine-tune strategy parameters to maximize performance and minimize risk.
+
+# Select Best Trading Strategy:
+#   Choose the best-performing trading strategy based on backtesting results and other criterias.
+
+# Monitor Portfolio Risk:
+#   Track portfolio risk metrics in real-time (e.g., VaR, exposure)
+
+# Set Stop-Loss and Take-Profit Levels:
+#   Determine appropriate stop-loss and take-profit levels for individual trades.
+
+# Adjust Position Sizes:
+#   Dynamically adjust position sizes based on risk tolerance, market conditions, and portfolio performance.
+
+# Construct Optimal Portfolio:
+#   Allocate capital across different assets to maximize returns and minimize risk.
+
+# Execute Trades:
+#   Place buy and sell orders on live markets through broker APIs.
+
+# Monitor Trade Execution:
+#   Track order execution and fill rates.
+
+# Generate Performance Reports:
+#   Create reports summarizing trading performance, risk metrics, and other key indicators.
+
+# Infrastructure Management:
+#   Ensure the trading infrastructure operates efficiently and reliably.
+#   Monitor system performance and resource utilization.
+#   Implement automated alerts for critical events.
+#   Maintain documentation of the trading system and processes.
+
+
+
+
+# Task Name	Task Description	Required Data Points	Expected Output	Relevant Agent	Relevant Tools
+# Acquire Historical Market Data	Fetch historical price, volume, and other relevant data for specified assets from various sources.	Ticker symbols, date range, data frequency	Cleaned and structured historical data	Data Acquisition Agent	yfinance, Alpaca API, IEX Cloud API, Quandl API, requests, BeautifulSoup4
+# Collect Real-Time Market Data	Stream live price quotes, volume, and other market data for selected instruments.	Ticker symbols, data frequency	Real-time market data stream	Data Acquisition Agent	Alpaca API, IEX Cloud API, Polygon.io API
+# Fetch News and Sentiment Data	Collect news articles, social media posts, and other text data related to target assets.	Ticker symbols, keywords, news sources, social media platforms	Structured text data, sentiment scores	Data Acquisition Agent	News APIs (e.g., NewsAPI, Google News API), Twitter API, Reddit API
+# Clean and Preprocess Market Data	Handle missing values, outliers, and inconsistencies in market data.	Raw market data	Cleaned and preprocessed market data	Data Processing Agent	Pandas, NumPy
+# Compute Technical Indicators	Calculate various technical indicators (e.g., moving averages, RSI, MACD) from historical price data.	OHLC (Open, High, Low, Close) data, volume data	Technical indicator values	Data Processing Agent	TA-Lib, Tulip Indicators, scikit-ta
+# Conduct Exploratory Data Analysis (EDA)	Analyze historical market data to identify patterns, trends, and relationships.	Cleaned market data, technical indicator values	EDA report with visualizations and insights	Market Analysis Agent	Pandas, NumPy, Matplotlib, Seaborn
+# Identify Potential Trading Opportunities	Detect chart patterns, breakouts, and other technical signals that may indicate profitable trading opportunities.	Cleaned market data, technical indicator values, EDA report	List of potential trading opportunities with associated signals	Market Analysis Agent	TA-Lib, Tulip Indicators, scikit-ta
+# Develop Trading Strategies	Create new trading strategies based on market analysis and insights.	Market analysis report, historical market data, technical indicators	Trading strategy rules, entry/exit criteria, position sizing	Strategy Development Agent	Backtrader, Zipline, Freqtrade, Python, Custom Code
+# Backtest Trading Strategies	Evaluate the performance of trading strategies on historical data.	Trading strategy rules, historical market data	Backtesting report with performance metrics (e.g., profit/loss, Sharpe ratio, drawdown)	Strategy Development Agent	Backtrader, Zipline, Freqtrade
+# Optimize Strategy Parameters	Fine-tune strategy parameters to maximize performance and minimize risk.	Backtesting report, historical market data, trading strategy rules	Optimized strategy parameters	Parameter Optimization Agent	Scikit-optimize, Hyperopt
+# Select Best Trading Strategy	Choose the best-performing trading strategy based on backtesting results and other criteria.	Backtesting reports, market conditions, risk tolerance	Selected trading strategy	Strategy Selection Agent	Custom Code, Rule-Based System
+# Monitor Portfolio Risk	Track portfolio risk metrics in real-time (e.g., VaR, exposure).	Current portfolio positions, market data	Risk report with key metrics	Risk Management Agent	NumPy, SciPy, Custom Code
+# Set Stop-Loss and Take-Profit Levels	Determine appropriate stop-loss and take-profit levels for individual trades.	Trading strategy rules, risk tolerance, market conditions	Stop-loss and take-profit levels	Risk Management Agent	Custom Code, Rule-Based System
+# Adjust Position Sizes	Dynamically adjust position sizes based on risk tolerance, market conditions, and portfolio performance.	Portfolio risk report, market data, trading strategy rules	Updated position sizes	Risk Management Agent	Custom Code, Rule-Based System
+# Construct Optimal Portfolio	Allocate capital across different assets to maximize returns and minimize risk.	Asset returns, correlations, risk tolerance	Optimal portfolio allocation	Portfolio Management Agent	PyPortfolioOpt, Custom Code
+# Execute Trades	Place buy and sell orders on live markets through broker APIs.	Trading signals, order size, price limits	Executed trades, order status	Trade Execution Agent	Alpaca API, Interactive Brokers API
+# Monitor Trade Execution	Track order execution and fill rates.	Executed trades, order status	Trade execution report	Trade Execution Agent	Alpaca API, Interactive Brokers API
+# Generate Performance Reports	Create reports summarizing trading performance, risk metrics, and other key indicators.	Trade history, market data, portfolio positions	Performance reports	Custom Code, Reporting Libraries	
+# Do Fundamental Analysis of a Ticker	Access the relevant tables to run a detailed fundamental analysis for a stock	OHLC Data, Volume Data, Open Interest Data, Market Sentiment Data, Latest news Data, Raw Materials Data, Market Share Data etc.	Fundamental Analysis Report, Features Generated from Fundamental Analysis	Researcher Agent	Google Search, Tivally Search, API Calling
